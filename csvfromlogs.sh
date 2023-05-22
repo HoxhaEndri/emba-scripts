@@ -41,7 +41,7 @@ for dir in "${dirs[@]}"; do
     then
         result+="$VEREXP;"
     else
-	result+=";"
+	result+="NA;"
     fi
 
     SYS=$(find "$dir/csv_logs/" -name "f50_base_aggregator.csv" -exec grep "^system_emulation_state;" {} \; | cut -d ";" -f2- )
@@ -114,10 +114,10 @@ for dir in "${dirs[@]}"; do
     KERVERSTR_BINWALK=$(find "$dir/csv_logs/" -name "s24_kernel_bin_identifier.csv" -exec grep 'firmware_binwalk_emba' {} \; | tail -1 | cut -d ";" -f2)
     if [ -n "$KERVERSTR" ]
     then
-        result+="=""$KERVERSTR;"
+        result+="'""$KERVERSTR;"
     elif [ -n "$KERVERSTR_BINWALK" ]
     then
-	result+="=""$KERVERSTR_BINWALK;"
+	result+="'""$KERVERSTR_BINWALK;"
     else
 	result+=";"
     fi
