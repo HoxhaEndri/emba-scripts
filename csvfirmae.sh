@@ -11,4 +11,4 @@ for dir in "${dirs[@]}"; do
         fw_name=$(echo "$firmae_temp" | rev | cut -d"/" -f1 | rev | cut -d ";")
         echo "$fw_name"
     fi
-
+done
