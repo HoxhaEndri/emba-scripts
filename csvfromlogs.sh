@@ -1,6 +1,6 @@
 #! /bin/bash
 
-result=$'Firmware Name;Parameters;OS Verified;Architecture;Verified Exploited;Booted;IP_DET;ICMP;NMAP;Versions Identified;User Emulation State;Files;Directories;Kernel Symbols;Kernel Version Orig;Kernel version stripped; Config extracted;AArch;\n'
+result=$'Firmware Name;Parameters;OS Verified;Architecture;Verified Exploited;Booted;IP_DET;ICMP;NMAP;Versions Identified;User Emulation State;Files;Directories;Kernel Symbols;Kernel Version Orig;Kernel version stripped; Config extracted;Arch;End;\n'
 mapfile -t dirs < <(find . -maxdepth 1 -type d)
 unset dirs[0]
 for dir in "${dirs[@]}"; do
@@ -86,8 +86,8 @@ for dir in "${dirs[@]}"; do
 	result+=";"
     fi
 
-    KERSYS=$(find "$dir/csv_logs/" -name "s24_kernel_bin_identifier.csv" -exec grep 'unblob_extracted' {} \; | rev | cut -d ";" -f2 | rev | sort -rn | head -1 |tr '\n' ' ')
-    KERSYS_BINWALK=$(find "$dir/csv_logs/" -name "s24_kernel_bin_identifier.csv" -exec grep 'firmware_binwalk_emba' {} \; |  rev | cut -d ";" -f2 | rev | sort -rn | head -1 | tr '\n' ' ')
+    KERSYS=$(find "$dir/csv_logs/" -name "s24_kernel_bin_identifier.csv" -exec grep 'unblob_extracted' {} \; | rev | cut -d ";" -f4 | rev | sort -rn | head -1 |tr '\n' ' ')
+    KERSYS_BINWALK=$(find "$dir/csv_logs/" -name "s24_kernel_bin_identifier.csv" -exec grep 'firmware_binwalk_emba' {} \; |  rev | cut -d ";" -f4 | rev | sort -rn | head -1 | tr '\n' ' ')
     if [ -n "$KERSYS" ]
     then
         result+="${KERSYS::-1};"
@@ -130,8 +130,8 @@ for dir in "${dirs[@]}"; do
 	result+="N;"
     fi
 
-    AARCH=$(find "$dir/csv_logs/" -name "p99_prepare_analyzer.csv" -exec grep 'unblob_extracted' {} \; | head -1 | rev | cut -d ";" -f 2,3 | rev | tr ';' '_')
-    AARCH_BINWALK=$(find "$dir/csv_logs/" -name "p99_prepare_analyzer.csv" -exec grep 'firmware_binwalk_emba' {} \; | head -1 | rev | cut -d ";" -f 2,3 | rev | tr ';' '_')
+    AARCH=$(find "$dir/csv_logs/" -name "p99_prepare_analyzer.csv" -exec grep 'unblob_extracted' {} \; | head -1 | rev | cut -d ";" -f 2,3 | rev)
+    AARCH_BINWALK=$(find "$dir/csv_logs/" -name "p99_prepare_analyzer.csv" -exec grep 'firmware_binwalk_emba' {} \; | head -1 | rev | cut -d ";" -f 2,3 | rev )
     if [ -n "$AARCH" ]
     then
 	result+="$AARCH;"
@@ -146,5 +146,3 @@ for dir in "${dirs[@]}"; do
 done
 #echo "$result"
 echo "$result" > log.csv
-
-
